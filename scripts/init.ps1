@@ -73,7 +73,8 @@ Step 'uipro' {
     }
 }
 # "y" answers the "Install the design hook?" prompt.
-Step 'impeccable'  { 'y' | npx -y impeccable@latest install --providers=codex,claude --scope=project }
+# Run through cmd: PowerShell would split codex,claude into two arguments.
+Step 'impeccable'  { cmd /c "echo y| npx -y impeccable@latest install --providers=codex,claude --scope=project" }
 
 # 3. Project files from templates. Never overwrite an existing file.
 Step 'templates' {

@@ -29,7 +29,7 @@ if (Get-Command uipro -ErrorAction SilentlyContinue) {
 }
 
 Write-Host "== impeccable"
-'y' | npx -y impeccable@latest update
+cmd /c "echo y| npx -y impeccable@latest update"
 
 Write-Host "== Link check"
 & "$PSScriptRoot\link-skills.ps1"
