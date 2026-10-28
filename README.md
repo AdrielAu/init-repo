@@ -25,6 +25,7 @@ Update it later with `npx skills update -g`.
   - [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
   - [impeccable](https://github.com/pbakaus/impeccable), with Claude and Codex hooks
   - [hyperframes](https://github.com/heygen-com/hyperframes) core 4
+  - `raw-dog`, bundled here: you write the code while the agent plans, scaffolds, hints and reviews. Run `/raw-dog [raw|tease|stroke|edge]` or say "let me raw dog it". The assistance level goes from `raw` (you write everything, the agent reviews) to `edge` (the agent stubs the functions and tests, you fill the bodies). Hints climb nibble › lick › suck.
 - **`docs/agents/coding-standards.md`**: Karpathy's four principles combined with Ponytail's ladder and its non-negotiables.
 - **`docs/agents/frontend-workflow.md`**:
   - New surface: taste sets direction → ui-ux-pro-max builds the system and validates it → build → impeccable gate.
@@ -44,5 +45,5 @@ The skill checks these first and asks before installing anything.
 ```
 SKILL.md              agent instructions
 scripts/              preflight + init (PowerShell and bash)
-templates/            files copied into the target repo
+templates/            files copied into the target repo (skills/raw-dog.md becomes .agents/skills/raw-dog/SKILL.md)
 ```

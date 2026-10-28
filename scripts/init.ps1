@@ -92,6 +92,13 @@ Step 'templates' {
         New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
         Copy-Item (Join-Path $Templates $f) $dest
     }
+    # Stored as raw-dog.md, not SKILL.md, so `npx skills add` on this repo does not see a second skill.
+    $f = '.agents\skills\raw-dog\SKILL.md'
+    $dest = Join-Path $root $f
+    if (Test-Path $dest) { $kept += $f } else {
+        New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
+        Copy-Item (Join-Path $Templates 'skills\raw-dog.md') $dest
+    }
     if ($kept) { $script:report['templates-kept-existing'] = ($kept -join ', ') }
     git update-index --add --chmod=+x scripts/link-skills.sh scripts/update-skills.sh 2>$null
     $global:LASTEXITCODE = 0
@@ -130,6 +137,7 @@ $expect = [ordered]@{
     unslop = @('unslop'); matt = @('setup-matt-pocock-skills', 'grill-me', 'tdd'); ponytail = @('ponytail')
     taste = @('design-taste-frontend'); imagegen = @('imagegen-frontend-web'); uipro = @('ui-ux-pro-max')
     impeccable = @('impeccable'); hyperframes = @('hyperframes', 'hyperframes-cli', 'hyperframes-registry', 'media-use')
+    templates = @('raw-dog')
 }
 $missing = @()
 foreach ($k in $expect.Keys) {

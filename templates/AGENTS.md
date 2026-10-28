@@ -20,6 +20,7 @@ Instructions for every coding agent in this repo (Claude Code, Codex, Antigravit
 - Install new skills with `npx skills add <source> -a codex -y` so they land in `.agents/skills/` only.
 - Update every skill with `scripts/update-skills.ps1` or `scripts/update-skills.sh`.
 - Only use the `unslop` skill when the user explicitly asks for it.
+- Only use the `raw-dog` skill when the user explicitly says they want to raw dog it or are raw dogging it.
 
 ## Project
 

@@ -72,6 +72,9 @@ copy_templates() {
     mkdir -p "$(dirname "$f")"
     cp "$TEMPLATES/$f" "$f"
   done
+  # Stored as raw-dog.md, not SKILL.md, so `npx skills add` on this repo does not see a second skill.
+  f=.agents/skills/raw-dog/SKILL.md
+  if [ -e "$f" ]; then kept="$kept $f"; else mkdir -p "$(dirname "$f")"; cp "$TEMPLATES/skills/raw-dog.md" "$f"; fi
   chmod +x scripts/link-skills.sh scripts/update-skills.sh 2>/dev/null || true
   [ -n "$kept" ] && note templates-kept-existing "$kept"
   return 0
@@ -111,6 +114,7 @@ check imagegen imagegen-frontend-web
 check uipro ui-ux-pro-max
 check impeccable impeccable
 check hyperframes hyperframes hyperframes-cli hyperframes-registry media-use
+check templates raw-dog
 note missing-skills "${missing:-none}"
 [ -n "$(ls -A .claude/skills 2>/dev/null)" ] && note claude-sees-skills true || note claude-sees-skills false
 grep -qs impeccable .claude/settings.local.json && note impeccable-claude-hook true || note impeccable-claude-hook false

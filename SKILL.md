@@ -50,7 +50,7 @@ The script:
 
 1. creates `.agents/skills/` and links `.claude/skills` to it (a junction on Windows);
 2. installs every skill into `.agents/skills/` only;
-3. copies `AGENTS.md`, `docs/agents/*.md` and `scripts/{link,update}-skills.*` from `<skill-dir>/templates/`;
+3. copies `AGENTS.md`, `docs/agents/*.md` and `scripts/{link,update}-skills.*` from `<skill-dir>/templates/`, and `templates/skills/raw-dog.md` to `.agents/skills/raw-dog/SKILL.md`;
 4. appends the init-repo and impeccable blocks to `.gitignore`;
 5. writes `.impeccable/config.json` with `buildPath: "code"` and `telemetry: false`.
 
@@ -59,7 +59,7 @@ It ends with a `REPORT`.
 ## 4. Fix what the report flags
 
 - **A step `failed`:** re-run just that install command (it's in the script) and read the error. Retry once.
-- **`missing-skills` is not `none`:** install those with `npx -y skills@latest add <source> --skill <name> -a codex -y`.
+- **`missing-skills` is not `none`:** install those with `npx -y skills@latest add <source> --skill <name> -a codex -y`. For `raw-dog`, copy `<skill-dir>/templates/skills/raw-dog.md` to `.agents/skills/raw-dog/SKILL.md`.
 - **`link` is `BLOCKED`:** tell the user. Do not delete their files.
 - **The `impeccable` install prompted, failed, or `impeccable-claude-hook`/`impeccable-codex-hook` is false:** run `npx impeccable install --help`, find the non-interactive flags for hooks, and re-run with `--providers=codex,claude --scope=project`.
 - **`stray-design-folders` is not `none`:** an installer created a second design or skills location. Move any skill folders into `.agents/skills/`, delete the stray folder, and note it in the summary.
