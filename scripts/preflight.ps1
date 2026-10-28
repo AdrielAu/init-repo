@@ -6,10 +6,13 @@ $ErrorActionPreference = 'SilentlyContinue'
 function Get-Version([string]$cmd, [string[]]$argList) {
     $c = Get-Command $cmd -ErrorAction SilentlyContinue
     if (-not $c) { return $null }
-    $out = & $cmd @argList 2>&1 | Select-Object -First 1
+    # Collect all output before reading the exit code: cutting the pipeline
+    # short (Select-Object -First) kills the process and leaves $LASTEXITCODE unset.
+    $global:LASTEXITCODE = 0
+    $out = @(& $cmd @argList 2>&1)
     # The Windows "python3" Store stub exits 9009 with a "not found" message.
     if ($LASTEXITCODE -ne 0) { return $null }
-    return "$out".Trim()
+    return ("" + $out[0]).Trim()
 }
 
 $results = @()

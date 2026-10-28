@@ -89,5 +89,5 @@ Keep it short:
 - manual steps:
   - **Restart Claude Code and Antigravity** so they load the new skills. Claude Code does not read AGENTS.md in the first session after an install or upgrade.
   - **Codex:** open `/hooks` and approve the impeccable hook.
-  - **After cloning on another machine:** run `scripts/link-skills.ps1` (or `.sh`) once.
+  - **After cloning on another machine:** run `scripts/link-skills.ps1` (or `.sh`), then `scripts/update-skills.ps1` (or `.sh`) to restore impeccable's machine-local Claude hook.
   - **To update skills:** run `scripts/update-skills.ps1` (or `.sh`) and review the diff.

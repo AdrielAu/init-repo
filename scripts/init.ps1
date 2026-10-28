@@ -22,6 +22,12 @@ Set-Location $root
 $env:DISABLE_TELEMETRY = '1'
 $env:DO_NOT_TRACK = '1'
 $env:IMPECCABLE_NO_TELEMETRY = '1'
+$env:npm_config_loglevel = 'warn'          # hide "npm notice" lines (PowerShell shows them as errors)
+$env:npm_config_update_notifier = 'false'
+
+# Extra skills bundled by `uipro init`. They duplicate taste / ui-ux-pro-max /
+# impeccable and write their own design-system and brand files, so they go.
+$UiproExtras = @('banner-design', 'brand', 'design', 'design-system', 'slides', 'ui-styling')
 
 $report = [ordered]@{}
 function Step([string]$name, [scriptblock]$body) {
@@ -57,8 +63,17 @@ Step 'hyperframes' { npx @sk 'heygen-com/hyperframes' --skill hyperframes --skil
 Step 'uipro' {
     if (-not (Get-Command uipro -ErrorAction SilentlyContinue)) { npm install -g ui-ux-pro-max-cli }
     uipro init --ai universal
+    if ($LASTEXITCODE -eq 0) {
+        $removed = @()
+        foreach ($x in $UiproExtras) {
+            $p = Join-Path '.agents\skills' $x
+            if (Test-Path $p) { Remove-Item -Recurse -Force $p; $removed += $x }
+        }
+        if ($removed) { $script:report['uipro-extras-removed'] = ($removed -join ', ') }
+    }
 }
-Step 'impeccable'  { npx -y impeccable@latest install --providers=codex,claude --scope=project }
+# "y" answers the "Install the design hook?" prompt.
+Step 'impeccable'  { 'y' | npx -y impeccable@latest install --providers=codex,claude --scope=project }
 
 # 3. Project files from templates. Never overwrite an existing file.
 Step 'templates' {
@@ -124,7 +139,8 @@ $report['missing-skills'] = if ($missing) { $missing -join ', ' } else { 'none' 
 $report['claude-sees-skills'] = [bool](Test-Path '.claude\skills\impeccable') -or [bool](Get-ChildItem '.claude\skills' -ErrorAction SilentlyContinue | Select-Object -First 1)
 $report['impeccable-claude-hook'] = [bool]((Test-Path '.claude\settings.local.json') -and (Select-String -Path '.claude\settings.local.json' -Pattern 'impeccable' -Quiet))
 $report['impeccable-codex-hook'] = [bool](Test-Path '.codex\hooks.json')
-$report['stray-design-folders'] = (@('design-system', '.agent\skills') | Where-Object { Test-Path $_ }) -join ', '
+$stray = (@('design-system', '.agent\skills') | Where-Object { Test-Path $_ }) -join ', '
+$report['stray-design-folders'] = if ($stray) { $stray } else { 'none' }
 
 Write-Host ''
 Write-Host '== REPORT'

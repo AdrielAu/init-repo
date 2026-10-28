@@ -1,6 +1,8 @@
 # init-repo-start
 # Local link to .agents/skills (recreate with scripts/link-skills.ps1 or .sh)
 .claude/skills
+# Machine-local Claude settings (impeccable writes its hook here)
+.claude/settings.local.json
 # OS junk
 Thumbs.db
 desktop.ini
