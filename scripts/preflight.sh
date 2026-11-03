@@ -23,10 +23,6 @@ if command -v node >/dev/null; then
   json node true "$ok" "$v" "$(pkg node nodejs) (needs >=22.20; nvm recommended)" "all skill installers"
 else json node false false "" "$(pkg node nodejs) (needs >=22.20; nvm recommended)" "all skill installers"; fi
 
-# python 3
-if command -v python3 >/dev/null; then json python3 true true "$(first_line python3 --version)" "$(pkg python3 python3)" "ui-ux-pro-max search scripts"
-else json python3 false false "" "$(pkg python3 python3)" "ui-ux-pro-max search scripts"; fi
-
 # ffmpeg
 if command -v ffmpeg >/dev/null; then json ffmpeg true true "$(first_line ffmpeg -version)" "$(pkg ffmpeg ffmpeg)" "hyperframes rendering"
 else json ffmpeg false false "" "$(pkg ffmpeg ffmpeg)" "hyperframes rendering"; fi

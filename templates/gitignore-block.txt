@@ -3,6 +3,8 @@
 .claude/skills
 # Machine-local Claude settings (impeccable writes its hook here)
 .claude/settings.local.json
+# Taste's working files and screenshots
+.taste-skill/
 # OS junk
 Thumbs.db
 desktop.ini

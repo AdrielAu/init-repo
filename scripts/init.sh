@@ -5,7 +5,7 @@
 #
 #   bash <skill-dir>/scripts/init.sh [--skip taste,hyperframes]
 #
-# Skip names: unslop, matt, ponytail, taste, imagegen, uipro, impeccable, hyperframes, templates
+# Skip names: unslop, matt, ponytail, taste, imagegen, emil, impeccable, hyperframes, templates
 set -uo pipefail
 
 SKIP=","
@@ -20,10 +20,6 @@ cd "$root"
 
 export DISABLE_TELEMETRY=1 DO_NOT_TRACK=1 IMPECCABLE_NO_TELEMETRY=1
 export npm_config_loglevel=warn npm_config_update_notifier=false
-
-# Extra skills bundled by `uipro init`. They duplicate taste / ui-ux-pro-max /
-# impeccable and write their own design-system and brand files, so they go.
-UIPRO_EXTRAS="banner-design brand design design-system slides ui-styling"
 
 REPORT=""
 note() { REPORT="$REPORT$1: $2"$'\n'; }
@@ -47,18 +43,9 @@ step matt        sk mattpocock/skills
 step ponytail    sk dietrichgebert/ponytail
 step taste       sk https://github.com/Leonxlnx/taste-skill --skill design-taste-frontend
 step imagegen    sk https://github.com/Leonxlnx/imagegen-skills --skill imagegen-frontend-web
+# Only Emil's craft and web animation skills; his prototype would also clash with Matt Pocock's.
+step emil        sk emilkowalski/skills --skill emil-design-eng --skill animate --skill animation-performance --skill break-ui --skill find-animation-opportunities --skill improve-animations --skill mobile-native --skill review-animations
 step hyperframes sk heygen-com/hyperframes --skill hyperframes --skill hyperframes-cli --skill hyperframes-registry --skill media-use
-uipro_install() {
-  command -v uipro >/dev/null 2>&1 || npm install -g ui-ux-pro-max-cli
-  uipro init --ai universal || return $?
-  local removed="" x
-  for x in $UIPRO_EXTRAS; do
-    if [ -d ".agents/skills/$x" ]; then rm -rf ".agents/skills/$x"; removed="$removed $x"; fi
-  done
-  [ -n "$removed" ] && note uipro-extras-removed "$removed"
-  return 0
-}
-step uipro       uipro_install
 # "y" answers the "Install the design hook?" prompt.
 impeccable_install() { echo y | npx -y impeccable@latest install --providers=codex,claude --scope=project; }
 step impeccable  impeccable_install
@@ -111,7 +98,7 @@ check matt setup-matt-pocock-skills grill-me tdd
 check ponytail ponytail
 check taste design-taste-frontend
 check imagegen imagegen-frontend-web
-check uipro ui-ux-pro-max
+check emil emil-design-eng animate animation-performance break-ui find-animation-opportunities improve-animations mobile-native review-animations
 check impeccable impeccable
 check hyperframes hyperframes hyperframes-cli hyperframes-registry media-use
 check templates raw-dog

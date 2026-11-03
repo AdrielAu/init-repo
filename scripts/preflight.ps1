@@ -10,7 +10,6 @@ function Get-Version([string]$cmd, [string[]]$argList) {
     # short (Select-Object -First) kills the process and leaves $LASTEXITCODE unset.
     $global:LASTEXITCODE = 0
     $out = @(& $cmd @argList 2>&1)
-    # The Windows "python3" Store stub exits 9009 with a "not found" message.
     if ($LASTEXITCODE -ne 0) { return $null }
     return ("" + $out[0]).Trim()
 }
@@ -25,15 +24,7 @@ $results += [ordered]@{ tool='git'; found=[bool]$v; ok=[bool]$v; version=$v; win
 $v = Get-Version 'node' @('--version')
 $ok = $false
 if ($v -match 'v(\d+)\.(\d+)') { $ok = ([int]$Matches[1] -gt 22) -or ([int]$Matches[1] -eq 22 -and [int]$Matches[2] -ge 20) }
-$results += [ordered]@{ tool='node'; found=[bool]$v; ok=$ok; version=$v; required='>=22.20'; winget='OpenJS.NodeJS.LTS'; neededBy='all skill installers (npx skills, uipro, impeccable, hyperframes)' }
-
-# python 3
-$v = $null
-foreach ($p in @(@('python3', @('--version')), @('python', @('--version')), @('py', @('-3', '--version')))) {
-    $v = Get-Version $p[0] $p[1]
-    if ($v -match 'Python 3') { $pyCmd = $p[0]; break } else { $v = $null }
-}
-$results += [ordered]@{ tool='python3'; found=[bool]$v; ok=[bool]$v; version=$v; command=$pyCmd; winget='Python.Python.3.12'; neededBy='ui-ux-pro-max search scripts' }
+$results += [ordered]@{ tool='node'; found=[bool]$v; ok=$ok; version=$v; required='>=22.20'; winget='OpenJS.NodeJS.LTS'; neededBy='all skill installers (npx skills, impeccable, hyperframes)' }
 
 # ffmpeg
 $v = Get-Version 'ffmpeg' @('-version')
