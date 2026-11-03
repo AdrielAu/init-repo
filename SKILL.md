@@ -35,9 +35,8 @@ For each tool with `"ok": false`, ask the user whether to install it, naming wha
 | Missing and declined | Consequence |
 |---|---|
 | `git` or `node` (or node below 22.20) | Stop. Nothing can install. |
-| `python3` | Skip `uipro` |
 | `ffmpeg` | Skip `hyperframes` |
-| `chrome` | Skip `taste` |
+| `chrome` | Still install `taste`, because the frontend workflow depends on it. Warn the user that its browser checks (`inspect.mjs`, `scenes.mjs`) can't run until a browser is installed. |
 
 ## 3. Run the setup script
 

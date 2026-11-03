@@ -22,21 +22,21 @@ Update it later with `npx skills update -g`.
   - [ponytail](https://github.com/dietrichgebert/ponytail)
   - [taste](https://github.com/Leonxlnx/taste-skill) (`design-taste-frontend`)
   - [imagegen-frontend-web](https://github.com/Leonxlnx/imagegen-skills)
-  - [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
+  - [Emil Kowalski's skills](https://github.com/emilkowalski/skills): `emil-design-eng`, `review-animations`, `break-ui`, `mobile-native`, `animate`, `improve-animations`, `find-animation-opportunities` and `animation-performance`
   - [impeccable](https://github.com/pbakaus/impeccable), with Claude and Codex hooks
   - [hyperframes](https://github.com/heygen-com/hyperframes) core 4
   - `raw-dog`, bundled here: you write the code while the agent plans, scaffolds, hints and reviews. Run `/raw-dog [raw|tease|stroke|edge]` or say "let me raw dog it". The assistance level goes from `raw` (you write everything, the agent reviews) to `edge` (the agent stubs the functions and tests, you fill the bodies). Hints climb nibble › lick › suck.
 - **`docs/agents/coding-standards.md`**: Karpathy's four principles combined with Ponytail's ladder and its non-negotiables.
 - **`docs/agents/frontend-workflow.md`**:
-  - New surface: taste sets direction → ui-ux-pro-max builds the system and validates it → build → impeccable gate.
-  - Changes to an existing surface take a fast path.
+  - New surface: taste plans, builds and runs its browser checks → Emil's skills review how its motion moves (speed and feel, never removing it) and test worst-case data → impeccable as the final gate.
+  - Restyles use taste's redesign route. Edits take a fast path with no direction draw or build loop.
 - **`scripts/update-skills.*`**: updates every skill in one command. Review the diff before committing.
 - One local commit, never pushed.
 
 ## Requirements
 
 - Node 22.20 or later, and git.
-- Python 3 for ui-ux-pro-max, FFmpeg for hyperframes, and Chrome, Edge or Chromium for taste.
+- FFmpeg for hyperframes, and Chrome, Edge or Chromium for taste.
 
 The skill checks these first and asks before installing anything.
 

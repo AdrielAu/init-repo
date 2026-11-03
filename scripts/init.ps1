@@ -4,7 +4,7 @@
 #
 #   powershell -ExecutionPolicy Bypass -File <skill-dir>\scripts\init.ps1 [-Skip taste,hyperframes]
 #
-# Skip names: unslop, matt, ponytail, taste, imagegen, uipro, impeccable, hyperframes, templates
+# Skip names: unslop, matt, ponytail, taste, imagegen, emil, impeccable, hyperframes, templates
 param(
     [string[]]$Skip = @()
 )
@@ -24,10 +24,6 @@ $env:DO_NOT_TRACK = '1'
 $env:IMPECCABLE_NO_TELEMETRY = '1'
 $env:npm_config_loglevel = 'warn'          # hide "npm notice" lines (PowerShell shows them as errors)
 $env:npm_config_update_notifier = 'false'
-
-# Extra skills bundled by `uipro init`. They duplicate taste / ui-ux-pro-max /
-# impeccable and write their own design-system and brand files, so they go.
-$UiproExtras = @('banner-design', 'brand', 'design', 'design-system', 'slides', 'ui-styling')
 
 $report = [ordered]@{}
 function Step([string]$name, [scriptblock]$body) {
@@ -59,19 +55,9 @@ Step 'matt'        { npx @sk 'mattpocock/skills' -a codex -y }
 Step 'ponytail'    { npx @sk 'dietrichgebert/ponytail' -a codex -y }
 Step 'taste'       { npx @sk 'https://github.com/Leonxlnx/taste-skill' --skill design-taste-frontend -a codex -y }
 Step 'imagegen'    { npx @sk 'https://github.com/Leonxlnx/imagegen-skills' --skill imagegen-frontend-web -a codex -y }
+# Only Emil's craft and web animation skills; his prototype would also clash with Matt Pocock's.
+Step 'emil'        { npx @sk 'emilkowalski/skills' --skill emil-design-eng --skill animate --skill animation-performance --skill break-ui --skill find-animation-opportunities --skill improve-animations --skill mobile-native --skill review-animations -a codex -y }
 Step 'hyperframes' { npx @sk 'heygen-com/hyperframes' --skill hyperframes --skill hyperframes-cli --skill hyperframes-registry --skill media-use -a codex -y }
-Step 'uipro' {
-    if (-not (Get-Command uipro -ErrorAction SilentlyContinue)) { npm install -g ui-ux-pro-max-cli }
-    uipro init --ai universal
-    if ($LASTEXITCODE -eq 0) {
-        $removed = @()
-        foreach ($x in $UiproExtras) {
-            $p = Join-Path '.agents\skills' $x
-            if (Test-Path $p) { Remove-Item -Recurse -Force $p; $removed += $x }
-        }
-        if ($removed) { $script:report['uipro-extras-removed'] = ($removed -join ', ') }
-    }
-}
 # "y" answers the "Install the design hook?" prompt.
 # Run through cmd: PowerShell would split codex,claude into two arguments.
 Step 'impeccable'  { cmd /c "echo y| npx -y impeccable@latest install --providers=codex,claude --scope=project" }
@@ -135,8 +121,9 @@ $report['impeccable-config'] = 'buildPath=code, telemetry=false'
 # 6. Verify the expected skills are present.
 $expect = [ordered]@{
     unslop = @('unslop'); matt = @('setup-matt-pocock-skills', 'grill-me', 'tdd'); ponytail = @('ponytail')
-    taste = @('design-taste-frontend'); imagegen = @('imagegen-frontend-web'); uipro = @('ui-ux-pro-max')
+    taste = @('design-taste-frontend'); imagegen = @('imagegen-frontend-web')
     impeccable = @('impeccable'); hyperframes = @('hyperframes', 'hyperframes-cli', 'hyperframes-registry', 'media-use')
+    emil = @('emil-design-eng', 'animate', 'animation-performance', 'break-ui', 'find-animation-opportunities', 'improve-animations', 'mobile-native', 'review-animations')
     templates = @('raw-dog')
 }
 $missing = @()
